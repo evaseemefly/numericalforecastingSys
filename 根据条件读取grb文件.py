@@ -86,6 +86,7 @@ lat,lon= getFinalValues(latlon_array,index)
     #    计算lat与lon的间隔，与最大值与最小值
     #    根据latlon_array数组中的值计算其在lat与lon数组中的位置，定位后获取该值
 values=grbs[index].values
+# 计算lat数组每个值的间距
 final_array=[]
 for lat_temp in latlon_array[0]:
     for lon_temp in latlon_array[1]:
