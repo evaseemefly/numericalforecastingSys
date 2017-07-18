@@ -3,6 +3,7 @@ import sys
 import importlib
 import os
 import pygrib
+import ArrayOper
 #import reload
 # 具体步骤：
 # 1 获取文件的一些信息（传入参数）
