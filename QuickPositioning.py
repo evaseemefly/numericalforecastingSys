@@ -1,4 +1,6 @@
 import ArrayOper
+import CommonCalculateHelper
+
 def getPosition(lat,lon,lat_array,lon_array):
     """根据传入的经纬度数组获取在lat与lon两个数组中的序号
     """
@@ -8,6 +10,10 @@ def getPosition(lat,lon,lat_array,lon_array):
      #获取lat数组的间隔
     set_lat_interval= ArrayOper.getArrayInterval(lat_array)
     # 获取长度
-    index_len=len(lat_array)
-    if len(set_lat_interval)<=0:
+    #index_len=len(lat_array)
+    #if len(set_lat_interval)<=0:
+    index_lat=CommonCalculateHelper.BinaryInSearch(lat_array,lat)
+    index_lon=CommonCalculateHelper.BinaryInSearch(lon_array,lon)
+    return index_lat,index_lon
+        
         
