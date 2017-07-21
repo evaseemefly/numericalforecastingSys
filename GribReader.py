@@ -2,7 +2,7 @@
 import sys
 import importlib
 import os
-#import pygrib
+import pygrib
 import ArrayOper
 import QuickPositioning
 #import reload
@@ -39,20 +39,22 @@ class GribReader:
 	def __str__(self):
 		return "读取的grib的文件路径为:%s"%self.filePath   		
     		
-	def __getLatLonValues(self,grbs,latlon_array,index):  
+	def test(self):
+		print('test func')
+
+	def getLatLonValues(self,grbs,latlon_array,index):  
 		"""privte
 		根据传入的grbs对象以及经纬度信息以及片区gribmessage获取经纬度数组
-		
 		"""  		
 		# 获取纬度二维数组
 		# 纬度二维数组    
 		# 纬度只需要取出第一列即可
 		lat_array= [x[0] for x in grbs[index].latlons()[0]]
 		# 取出经度——取出第一行即可
-		lon_array=grbs[index].latlons()[1][0].tolis()
+		lon_array=grbs[index].latlons()[1][0].tolist()
 		return lat_array,lon_array
 
-	def __getTargetArea(grbs,level,aging,fromDate):
+	def getTargetArea(self,grbs,level,aging,fromDate):
 		"""privte
 		根据grbs对象，等级，预报时效以及预报时间获取片区所在位置（下标）
 		根据高度，预报时效以及起始时间获取指定片区的所在位置（数组中的位置）
@@ -73,15 +75,14 @@ class GribReader:
 			    break
 		return index_final
 
-
 	def read(self,level,latlon_array_value):
 		"""根据等级读取文件，并根据传入的经纬度数组（根据该两个数组获取对应的值）
 		   返回这些经纬度在grbs[index].values中的对应值的数组
 		"""
 		# 1 找到对应文件——目前先根据预报要素、时间、时效
 		# 测试文件名为：HTBCG2016120100-006.grb
-		forecastType=self.forecastType
-		targetDateTime=self.targetDateTime
+		forecastType=self.__forecastType
+		targetDateTime=self.__targetDateTime
 		#使用此种方式会出错，注释掉
 		#targetForecastDate="from "+str(self.targetDateTime)
 		targetForecastDate=""
@@ -91,7 +92,7 @@ class GribReader:
 		aging=str(6).zfill(3)
 		grbname_array=[forecastType,targetDateTime,'-',aging,'.grb']
 		targetName=''.join(grbname_array)
-		targetPath=self.sourcePath
+		targetPath=self.__sourcePath
 		targetFullName=targetPath+targetName        
 		# 判断指定路径及是否存在指定文件
 		#/usr/testFIles/HTBCG2016120100-006.grb
@@ -109,12 +110,13 @@ class GribReader:
 		grbs=pygrib.open(targetFullName)
 		grbs.seek(0)
 
+		self.test()
 		# 3 根据经纬度二维数组以及层级获取指定的gribmessage
-		str_level='level '+level
+		str_level='level '+str(level)
 		# 获取满足条件的片区编号
-		index=getTargetArea(grbs,str_level,agingForecast,targetForecastDate)
+		index=self.getTargetArea(grbs,str_level,agingForecast,targetForecastDate)
 		# 根据经纬度找到对应的区域并取出对应的结果一维数组
-		lat_array,lon_array= getLatLonValues(grbs,latlon_array,index)
+		lat_array,lon_array= self.getLatLonValues(grbs,latlon_array_value,index)
 
 		# 3 获取传入的经纬度数组在values中对应的值
 		# 此种方式的思路，现在已经拥有lat和lon这两个数组了
@@ -135,7 +137,7 @@ class GribReader:
 		# 4 根据下标获取对应的值
 		latlon_value=[]
 		for temp in latlon_array_index:
-			latlon_value.append(values[temp[0],tem[1]])
+			latlon_value.append(values[temp[0],temp[1]])
 		return latlon_value
 		
 
