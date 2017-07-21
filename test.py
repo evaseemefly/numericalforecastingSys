@@ -27,4 +27,5 @@ index_lat,index_lon=QuickPositioning.getPosition(lat,lon,lat_array,lon_array)
 
 #调用GribReader类读取所在所在位置
 reader=GribReader.GribReader('/usr/testFIles/','','HTBCG','2016120100')
-reader.readGrib(1000)
+# reader.readGrib(1000)
+reader.read(1000)
