@@ -3,7 +3,7 @@
 # 2.如果找不到该值就返回该值的上一个Index和下一个Index
 # 3.小于List[0] 返回0
 # 4.大于len(List)返回该List[-1]
-def BinaryInSearch(arr, key):
+def BinaryInSearch(arr, key,desc=True):
     """
     """
     # 记录数组的最高位和最低位
@@ -12,23 +12,45 @@ def BinaryInSearch(arr, key):
     max = len(arr)-1
     if key in arr:
          # 建立一个死循环，直到找到key
+         # 此处存在一个问题，若传入的数组中有负数，此种方式会有问题
+         # 且会存在一直找不到则一直执行的问题
+         #先判断数组中是否存在负数
+         #不是不能为负数的问题，而是本数组是90——>-90，降序排列的
          while True:
              # 得到中位数
             # 这里一定要加int，防止列表是偶数的时候出现浮点数据
              center = int((min + max) / 2)
-             # key在数组左边
-             if arr[center] > key:
-                max = center - 1
-             # key在数组右边
-             elif arr[center] < key:
-                 min = center + 1
-             # key在数组中间
-             elif arr[center] == key:
-                 print(str(key) + "在数组里面的第" + str(center) + "个位置")
-                 return center
-    else:
-         print("没有该数字!")
-         return -1
+             if desc==True:
+                 # key在数组左边
+                 if arr[center] > key:
+                    max = center - 1
+                 # key在数组右边
+                 # 要判断是否是负数
+                 elif arr[center] < key:
+                     min = center + 1
+                 # key在数组中间
+                 elif arr[center] == key:
+                     print(str(key) + "在数组里面的第" + str(center) + "个位置")
+                     return center
+                 else:
+                     print("没有该数字!")
+                     return -1
+             elif desc!=True:
+                 # key在数组左边
+                 if arr[center] < key:
+                    max = center - 1
+                 # key在数组右边
+                 # 要判断是否是负数
+                 elif arr[center] > key:
+                     min = center + 1
+                 # key在数组中间
+                 elif arr[center] == key:
+                     print(str(key) + "在数组里面的第" + str(center) + "个位置")
+                     return center
+                 else:
+                     print("没有该数字!")
+                     return -1
+   
 
 
 def BinarySearch(arr,key):  

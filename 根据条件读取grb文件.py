@@ -4,6 +4,7 @@ import importlib
 import os
 import pygrib
 import ArrayOper
+import QuickPositioning
 #import reload
 # 具体步骤：
 # 1 获取文件的一些信息（传入参数）
@@ -58,8 +59,7 @@ def getTargetArea(grbs,level,aging,fromDate):
     return index_final
 
 # 4 根据经纬度二维数组以及层级获取指定的gribmessage
-latlon_array=[[90,80],[0,1]
-]
+
 level=100
 
 # 获取满足条件的片区编号
@@ -67,7 +67,7 @@ level=100
 index=getTargetArea(grbs,'level 1000','fcst time 6 hrs','from 201612010000')
 # 根据经纬度找到对应的区域并取出对应的结果一维数组
 
-def getFinalValues(latlon_array,index):
+def getLatLonValues(latlon_array,index):
     # 获取纬度二维数组
     # 纬度二维数组    
     # 纬度只需要取出第一列即可
@@ -76,7 +76,7 @@ def getFinalValues(latlon_array,index):
     lon_array=grbs[index].latlons()[1][0].tolis()
     return lat_array,lon_array
 
-lat,lon= getFinalValues(latlon_array,index)
+lat_array,lon_array= getLatLonValues(latlon_array,index)
 
 # 此种方式的思路，现在已经拥有lat和lon这两个数组了
 # lat,lon分别代表经度和纬度
@@ -87,13 +87,18 @@ lat,lon= getFinalValues(latlon_array,index)
     #    计算lat与lon的间隔，与最大值与最小值
     #    根据latlon_array数组中的值计算其在lat与lon数组中的位置，定位后获取该值
 values=grbs[index].values
-# 计算lat数组每个值的间距
+
+latlon_array_value=[[90,80],[0,1]]
+for temp in latlon_array_value:
+    latlon_array_index.append(QuickPositioning.getPosition(temp[0],temp[1],lat_array,lon_array)) 
+
+# 获取了经纬度的数组
 final_array=[]
-for lat_temp in latlon_array[0]:
-    for lon_temp in latlon_array[1]:
-        index_lat=lat.index(lat_temp)
-        index_lon=lon.indexOf(lat_temp)
-        final_array.push(values[index_lat][index_lon])
+#for lat_temp in latlon_array[0]:
+#    for lon_temp in latlon_array[1]:
+#        index_lat=lat.index(lat_temp)
+#        index_lon=lon.indexOf(lat_temp)
+#        final_array.push(values[index_lat][index_lon])
     
 
 

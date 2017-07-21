@@ -12,8 +12,10 @@ def getPosition(lat,lon,lat_array,lon_array):
     # 获取长度
     #index_len=len(lat_array)
     #if len(set_lat_interval)<=0:
-    index_lat=CommonCalculateHelper.BinaryInSearch(lat_array,lat)
-    index_lon=CommonCalculateHelper.BinaryInSearch(lon_array,lon)
+    isdesc_lat=lat_array[0]<lat_array[1]
+    isdesc_lon=lon_array[0]<lon_array[1]
+    index_lat=CommonCalculateHelper.BinaryInSearch(lat_array,lat,isdesc_lat)
+    index_lon=CommonCalculateHelper.BinaryInSearch(lon_array,lon,isdesc_lon)
     return index_lat,index_lon
         
         
